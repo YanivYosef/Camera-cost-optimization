@@ -1,4 +1,4 @@
 # Camera-cost-optimization
 EA for the vertex cover problem
 https://docs.google.com/document/d/1T-iFh-efSGPf4XQgFLSq7Xo-2XozHz0fHWviA2y1Lqc/edit?usp=sharing
-https://github.com/YanivYosef/Camera-cost-optimization
+https://docs.google.com/document/d/1Ai1iUHR4r3mUhxTd9ubKPJtL6nWpkXeH/edit?usp=sharing&ouid=114160354503608514691&rtpof=true&sd=true

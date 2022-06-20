@@ -15,17 +15,23 @@ http://localhost:8080/camerasMap
 {
     "payload" : {
         "graph" : {
-           "vertexAmount" : 10,
-           "edges" : [[1,2], [1,3], [3,7], [3,10], [2,5], [2,8], [8,9], [8,10], [1,4], [2,4], [6,7]]
+           "vertexAmount" : 100 ,
+           "edges" : [[75,40], [52,32], [27,7], [4,46], [10,99], [51,58], [39,49], [44,52], [88,79], [32,78], [15,3], [27,9], [84,22], [96,19], [74,81], [83,6], [23,24], [16,1], [70,88], [67,79], [87,33], [13,23], [73,28], [4,66], [38,29], [6,48], [14,73], [58,87], [96,98], [59,11], [47,68], [12,96], [47,73], [93,28], [82,1], [18,26], [15,85], [25,66], [100,79], [15,74], [60,76], [24,86], [36,65], [73,39], [88,10], [82,72], [19,39], [43,50], [92,23], [45,74], [80,28]]
+
         },
         "CamerasConfig" : {
-        "minNumOfCameras" : 2 ,
-        "maxNumOfCameras" : 6
+        "minNumOfCameras" : 10 ,
+        "maxNumOfCameras" : 30
         } ,
         "EaConfig" : {
-            "numOfCamerasWeight" : 0.6 ,
-            "coverWeight" : 0.4
+            "numOfCamerasWeight" : 0.2 ,
+            "coverWeight" : 0.8 ,
+            "selection" : 3 ,
+            "populationSize" : 40 ,
+            "maxNumOfGeneration" : 100 ,
+            "targetFitness" : 0.8
         }
+
     }
 }
  */
@@ -37,17 +43,27 @@ public class CamerasEa {
     private int maxCameras;
     private double numOfCamerasWeight;
     private double coverWeight;
-    private int selectionStrategy = 4;
+    private Selection selectionStrategy;
     private final double prob = 0.6;
     private double score = 0.0;
+    private int generation = 0;
+    private int populationSize;
+    private int maxNumOfGeneration;
+    private double targetFitness;
 
-    public CamerasEa(Graph graph, int minCameras, int maxCameras, double numOfCamerasWeight, double coverWeight) throws IOException {
+    public CamerasEa(Graph graph, int minCameras, int maxCameras, double numOfCamerasWeight, double coverWeight,
+                     Selection selection, int populationSize, int maxNumOfGeneration, double targetFitness) throws IOException {
 
         this.graph = graph;
         this.maxCameras=maxCameras;
         this.minCameras=minCameras;
         this.coverWeight=coverWeight;
         this.numOfCamerasWeight=numOfCamerasWeight;
+        this.selectionStrategy = selection;
+        this.populationSize = populationSize;
+        this.maxNumOfGeneration = maxNumOfGeneration;
+        this.targetFitness = targetFitness;
+
 
     }
 
@@ -75,24 +91,24 @@ public class CamerasEa {
         FitnessEvaluator<List<Integer>> fitnessEvaluator = new CoverEvaluator(graph, numOfCamerasWeight);
         SelectionStrategy<Object> selection = null;
         switch(selectionStrategy) {
-            case 1:
+            case RouletteWheelSelection:
                 selection = new RouletteWheelSelection();
                 break;
-            case 2:
+            case SigmaScaling:
                 selection = new SigmaScaling();
                 break;
-            case 3:
+            case StochasticUniversalSampling:
                 selection = new StochasticUniversalSampling();
                 break;
-            case 4:
+            case TournamentSelection:
                 Probability probability = new Probability(prob);
                 selection = new TournamentSelection(probability);
                 break;
-            case 5:
+            case TruncationSelection:
                 selection = new TruncationSelection(prob);
                 break;
             default:
-               selection = new RankSelection();
+                selection = new RankSelection();
         }
 
         Random rng = new MersenneTwisterRNG();
@@ -110,16 +126,16 @@ public class CamerasEa {
             public void populationUpdate(PopulationData<? extends List<Integer>> data)
             {
                 System.out.printf("Generation %d: %s with fitness %f\n",
-                        data.getGenerationNumber(),
+                        generation = data.getGenerationNumber(),
                         data.getBestCandidate(),
                         data.getBestCandidateFitness());
-                score = data.getBestCandidateFitness();
+                        score = data.getBestCandidateFitness();
             }
         });
         TerminationCondition tc = new TerminationCondition() {
             @Override
             public boolean shouldTerminate(PopulationData<?> populationData) {
-                if(populationData.getGenerationNumber() > 199) {
+                if(populationData.getGenerationNumber() >= maxNumOfGeneration) {
                     System.out.println("That's enough for now");
                     return true;
                 } else {
@@ -127,10 +143,10 @@ public class CamerasEa {
                 }
             }
         };
-        List<Integer> result = engine.evolve(10, 3, tc, new TargetFitness(0.5, true));
+        List<Integer> result = engine.evolve(populationSize, 3, tc, new TargetFitness(targetFitness, true));
 
         System.out.println(result);
-        return result.toString() + "\nscore = " + score;
+        return  "Cameras location: " + result.toString() + "\nScore: " + score + "\nNum of generation: " + generation;
 
     }
 }

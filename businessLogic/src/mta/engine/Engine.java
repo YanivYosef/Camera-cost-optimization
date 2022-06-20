@@ -9,10 +9,17 @@ import java.io.IOException;
 
 public class Engine {
 public String produceBestCover(String payloadString){
-    Payload payload = (new JsonParser()).parseGraph(payloadString);
+    Payload payload;
+    try{
+        payload = (new JsonParser()).parseGraph(payloadString);
+    } catch(Exception e){
+        return e.getMessage();
+    }
     String returnValue = "";
     try {
-        CamerasEa camEa = new CamerasEa(payload.getGraph(), payload.getMinNumOfCameras(),payload.getMaxNumOfCameras(), payload.getNumOfCamerasWeight(), payload.getCoverWeight());
+        CamerasEa camEa = new CamerasEa(payload.getGraph(), payload.getMinNumOfCameras(),payload.getMaxNumOfCameras(),
+                payload.getNumOfCamerasWeight(), payload.getCoverWeight(), payload.getSelection(), payload.getPopulationSize(),
+                payload.getMaxNumOfGeneration(), payload.getTargetFitness());
         returnValue = camEa.startEA();
     } catch(JsonProcessingException e) {
         System.out.println("Exception:"+e);

@@ -146,7 +146,7 @@ public class CamerasEa {
         List<Integer> result = engine.evolve(populationSize, 3, tc, new TargetFitness(targetFitness, true));
 
         System.out.println(result);
-        return  "Cameras location: " + result.toString() + "\nScore: " + score + "\nNum of generation: " + generation;
+        return  "Cameras location: " + result.toString() + "\nScore: " + score + "\nNum of generation: " + generation + "\nNum of cameras: " + result.size();
 
     }
 }

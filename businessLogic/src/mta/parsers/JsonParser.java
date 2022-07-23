@@ -90,11 +90,11 @@ public class JsonParser {
         Graph graph = new Graph(vertexAmount, edges);
         double numOfCamerasWeight = 0.6;
         int minCameras = 0;
-        int maxCameras = 0;
+        int maxCameras = 30;
         int selection = 2;
-        int populationSize = 20;
+        int populationSize = 40;
         int maxNumOfGeneration = 100;
-        double targetFitness = 0.8;
+        double targetFitness = 0.7;
         try{
             numOfCamerasWeight = obj.getJSONObject("payload").getJSONObject("EaConfig").getDouble("numOfCamerasWeight");
         } catch(Exception e){}

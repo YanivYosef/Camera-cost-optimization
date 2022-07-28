@@ -14,8 +14,8 @@ function App() {
     <main>
     <Grid container direction = "column" spacing={1}>
       <Headline/>
-      <InsertDetails data = {data.details}/> 
-      <Features EAdata = {EAdata.details}/>
+      <InsertDetails/>
+      <Features/>
       <Submit/>
     </Grid>
     </main>

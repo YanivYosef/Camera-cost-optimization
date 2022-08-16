@@ -23,7 +23,7 @@ function App() {
     "EaConfig": {
       "numOfCamerasWeight": 0.3,
       "coverWeight": 0.7,
-      "selection": 4,
+      "selection": 0,
       "populationSize": 40,
       "maxNumOfGeneration": 100,
       "targetFitness": 0.7
@@ -42,49 +42,40 @@ function App() {
 //       "maxNumOfCameras": 50
 //     }
 
-//const new_obj = { ...obj, name: { first: 'blah', last: 'ha'} }
+//const new_obj = { ...obj, name: { first: 'blah', last: 'ha'} } // to create an object
 
 const updateCamerasConfig = (camerasConfig) => {
   setPayload({...payload, CamerasConfig:
         {minNumOfCameras: camerasConfig.minNumOfCameras, maxNumOfCameras: camerasConfig.maxNumOfCameras}})
-  console.log(payload);
 }
 
-const onSubmit = () => {
-  client.post('/camerasMap', {
-    "payload": {
-      "graph": {
-        "vertexAmount": 100,
-        "edges": [[75, 40], [52, 32], [27, 7], [4, 46], [10, 99], [51, 58], [39, 49], [44, 52], [88, 79], [32, 78], [15, 3], [27, 9], [84, 22], [96, 19], [74, 81], [83, 6], [23, 24], [16, 1], [70, 88], [67, 79], [87, 33], [13, 23], [73, 28], [4, 66], [38, 29], [6, 48], [14, 73], [58, 87], [96, 98], [59, 11], [47, 68], [12, 96], [47, 73], [93, 28], [82, 1], [18, 26], [15, 85], [25, 66], [100, 79], [15, 74], [60, 76], [24, 86], [36, 65], [73, 39], [88, 10], [82, 72], [19, 39], [43, 50], [92, 23], [45, 74], [80, 28]]
+const updateEaConfig = (EaConfig) => {
+  setPayload({...payload, EaConfig: {numOfCamerasWeight: EaConfig.numOfCamerasWeight,
+      coverWeight: EaConfig.coverWeight,
+      selection: EaConfig.selection,
+      populationSize: EaConfig.populationSize,
+      maxNumOfGeneration: EaConfig.maxNumOfGeneration,
+      targetFitness: EaConfig.targetFitness}})
+}
+const onUpload = () => {
+  console.log("uploading");
+}
 
-      },
-      "CamerasConfig": {
-        "minNumOfCameras": 30,
-        "maxNumOfCameras": 50
-      },
-      "EaConfig": {
-        "numOfCamerasWeight": 0.3,
-        "coverWeight": 0.7,
-        "selection": 4,
-        "populationSize": 40,
-        "maxNumOfGeneration": 100,
-        "targetFitness": 0.7
-      }
-
-    }
-  })
-      .then((response) => {
-        console.log(response);
-      });
+const onSubmit = async () => {
+  const response = await client.post('/camerasMap', {
+    "payload": payload
+  });
+  console.log({payload});
+  console.log({response});
 }
 
   return (
     <main>
     <Grid container direction = "column" spacing={1}>
       <Headline/>
-      <InsertDetails updateCamerasConfig = {updateCamerasConfig}/>
-      <Features/>
-      <Submit onSubmit = {onSubmit}/>
+      <InsertDetails updateCamerasConfig = {updateCamerasConfig} payloadCamerasConfig={payload.CamerasConfig} onUpload={onUpload}/>
+      <Features updateEaConfig = {updateEaConfig} payloadEaConfig={payload.EaConfig}/>
+      <Submit onSubmit = {onSubmit} />
     </Grid>
     </main>
   );

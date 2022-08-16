@@ -4,19 +4,37 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-function InsertDetails({updateCamerasConfig}) {
+function InsertDetails({updateCamerasConfig, payloadCamerasConfig, onUpload}) {
 
-    let minNumOfCameras = 20;
-    const [camerasConfig, setCamerasConfig] = useState({});
-    const onMinFieldChange = (e) => {
-        setCamerasConfig({...camerasConfig, minNumOfCameras: e.target.value});
+    const [camerasConfig, setCamerasConfig] = useState(payloadCamerasConfig);
+
+    const[minNumOfCameras, setMinNumOfCameras] = useState(payloadCamerasConfig.minNumOfCameras) ;
+    const[maxNumOfCameras, setMaxNumOfCameras] = useState(payloadCamerasConfig.maxNumOfCameras) ;
+
+    useEffect(() => {
+        setCamerasConfig({ ...camerasConfig, minNumOfCameras });
+    }, [minNumOfCameras]);
+    useEffect(() => {
+        setCamerasConfig({ ...camerasConfig, maxNumOfCameras });
+    }, [maxNumOfCameras]);
+
+    useEffect(() => {
         updateCamerasConfig(camerasConfig);
+    }, [camerasConfig]);
+
+    const onMinFieldChange =  (e) => {
+
+        setMinNumOfCameras(+e.target.value);
+
     };
-    useEffect(()=> {
-        console.log(minNumOfCameras);
-        setCamerasConfig({...camerasConfig, minNumOfCameras: minNumOfCameras});
-        updateCamerasConfig(camerasConfig);
-    }, [minNumOfCameras]) ;
+
+    const onMaxFieldChange =  (e) => {
+
+        setMaxNumOfCameras(+e.target.value);
+
+    };
+
+
 
 return (<Grid item style={{ height: "230px", color: 'black', backgroundColor: '#c0d8f0' }} >
                 <Typography variant="h5" gutterBottom component="div">
@@ -26,11 +44,11 @@ return (<Grid item style={{ height: "230px", color: 'black', backgroundColor: '#
    send us a message and we'll respond within 24 hours.
       </Typography>
   <TextField id="filled-basic" label="min numbers of cameras: " variant="filled" defaultValue={minNumOfCameras} onChange={onMinFieldChange}/>
-    <TextField id="filled-basic" label="max numbers of cameras: " variant="filled" defaultValue={40} />
+    <TextField id="filled-basic" label="max numbers of cameras: " variant="filled" defaultValue={maxNumOfCameras} onChange={onMaxFieldChange}/>
   <Typography variant="subtitle1" gutterBottom component="div">
    Insert a graph
       </Typography>
-<Button variant="contained" color="success">
+<Button variant="contained" color="success" onClick={onUpload}>
   Upload
 </Button>
     </Grid>)

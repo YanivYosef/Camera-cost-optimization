@@ -91,7 +91,7 @@ public class JsonParser {
         double numOfCamerasWeight = 0.6;
         int minCameras = 0;
         int maxCameras = 30;
-        int selection = 2;
+        int selection = 3;
         int populationSize = 40;
         int maxNumOfGeneration = 100;
         double targetFitness = 0.7;

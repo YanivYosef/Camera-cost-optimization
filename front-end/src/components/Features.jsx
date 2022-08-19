@@ -82,10 +82,9 @@ return(<Grid item style={{ height: "220px", color: 'black', backgroundColor: '#c
                     id="demo-simple-select-filled"
                     value={selection}
                     onChange={handleChange}
+
                 >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
+
                     <MenuItem value={1}>RouletteWheelSelection</MenuItem>
                     <MenuItem value={2}>SigmaScaling</MenuItem>
                     <MenuItem value={4}>StochasticUniversalSampling</MenuItem>

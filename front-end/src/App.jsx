@@ -12,8 +12,6 @@ function App() {
 
   const [payload, setPayload] = useState({
     "graph": {
-      "vertexAmount": 100,
-      "edges": [[75, 40], [52, 32], [27, 7], [4, 46], [10, 99], [51, 58], [39, 49], [44, 52], [88, 79], [32, 78], [15, 3], [27, 9], [84, 22], [96, 19], [74, 81], [83, 6], [23, 24], [16, 1], [70, 88], [67, 79], [87, 33], [13, 23], [73, 28], [4, 66], [38, 29], [6, 48], [14, 73], [58, 87], [96, 98], [59, 11], [47, 68], [12, 96], [47, 73], [93, 28], [82, 1], [18, 26], [15, 85], [25, 66], [100, 79], [15, 74], [60, 76], [24, 86], [36, 65], [73, 39], [88, 10], [82, 72], [19, 39], [43, 50], [92, 23], [45, 74], [80, 28]]
 
     },
     "CamerasConfig": {
@@ -23,7 +21,7 @@ function App() {
     "EaConfig": {
       "numOfCamerasWeight": 0.3,
       "coverWeight": 0.7,
-      "selection": 0,
+      "selection": 1,
       "populationSize": 40,
       "maxNumOfGeneration": 100,
       "targetFitness": 0.7
@@ -57,8 +55,9 @@ const updateEaConfig = (EaConfig) => {
       maxNumOfGeneration: EaConfig.maxNumOfGeneration,
       targetFitness: EaConfig.targetFitness}})
 }
-const onUpload = () => {
-  console.log("uploading");
+const onUpload = (graph) => {
+  setPayload({...payload, graph:
+        {vertexAmount: graph.vertexAmount, edges: graph.edges}})
 }
 
 const onSubmit = async () => {

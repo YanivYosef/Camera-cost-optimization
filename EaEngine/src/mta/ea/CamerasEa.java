@@ -1,5 +1,7 @@
 package mta.ea;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.*;
@@ -9,7 +11,7 @@ import org.uncommons.watchmaker.framework.termination.TargetFitness;
 
 import java.io.IOException;
 import java.util.*;
-
+import java.util.Arrays;
 /*
 http://localhost:8080/camerasMap
 {
@@ -73,7 +75,7 @@ public class CamerasEa {
      values of integers in the PossibleCover array will be between 1 and graph.vertexAmount
      */
 
-    public String startEA() throws Exception {
+    public Map<String, Object> startEA() throws Exception {
         List<Integer> vertices = new ArrayList<>();
         for(int i=1;i<=graph.vertexAmount;i++) {vertices.add(i);}
 
@@ -144,9 +146,17 @@ public class CamerasEa {
             }
         };
         List<Integer> result = engine.evolve(populationSize, 3, tc, new TargetFitness(targetFitness, true));
-
+//        Map<Integer, Integer> array = new HashMap<>();
+//        for (int i = 0; i < result.size(); i++) {
+//            array.put(i, result.get(i));
+//        }
         System.out.println(result);
-        return  "Cameras location: " + result.toString() + "\nScore: " + score + "\nNum of generation: " + generation + "\nNum of cameras: " + result.size();
+        Map<String, Object> json = new HashMap();
+        json.put("\"camerasLocation\"", result);
+        json.put("\"score\"", score);
+        json.put("\"numOfGeneration\"", generation);
+        json.put("\"numOfCameras\"", result.size());
+        return  json;
 
     }
 }

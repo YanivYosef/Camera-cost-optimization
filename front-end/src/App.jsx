@@ -7,6 +7,8 @@ import InsertDetails from './components/InsertDetails'
 import Features from './components/Features'
 import Submit from './components/Submit'
 import axios from "axios";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import Button from "@mui/material/Button";
 
 function App() {
 
@@ -28,8 +30,9 @@ function App() {
     }
 
   });
-  let data = {details: {minCameras: 0, maxCameras: 10}}
-  let EAdata = {details: {numOfCamerasWeight: 0.4, coverWeight: 0.6, selection: 3, populationSize: 40, maxNumOfGeneration: 100, targetFitness: 0.7}}
+
+  const [open, setOpen] = React.useState(false);
+  const [solution, setSolution] = React.useState("");
 
   const client = axios.create({
     baseURL: "http://localhost:8080"
@@ -64,9 +67,15 @@ const onSubmit = async () => {
   const response = await client.post('/camerasMap', {
     "payload": payload
   });
-  console.log({payload});
-  console.log({response});
+  const data = response.data.replaceAll("=", ": ");
+  setSolution(data);
+  //setSolution(JSON.parse(data));
+  setOpen(true);
 }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <main>
@@ -76,6 +85,15 @@ const onSubmit = async () => {
       <Features updateEaConfig = {updateEaConfig} payloadEaConfig={payload.EaConfig}/>
       <Submit onSubmit = {onSubmit} />
     </Grid>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Solution:</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {solution}
+          </DialogContentText>
+
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

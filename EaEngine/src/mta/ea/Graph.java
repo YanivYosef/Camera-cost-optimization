@@ -7,10 +7,7 @@ import java.util.Objects;
 public class Graph {
     public int vertexAmount;
     public List<List<Integer>> edges;
-    public Graph() {
-        vertexAmount = 0;
-        edges = new ArrayList<>();
-    }
+
     public Graph(int vertexAmount, List<List<Integer>> edges){
         this.vertexAmount = vertexAmount;
         this.edges = edges;

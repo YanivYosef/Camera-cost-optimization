@@ -1,14 +1,13 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import {Select} from "@mui/material";
 import {useEffect, useState} from 'react';
-//import { SelectChangeEvent } from '@mui/material/Select';
+
 
 function Features({updateEaConfig, payloadEaConfig}) {
     const [selection, setSelection] = React.useState(payloadEaConfig.selection);

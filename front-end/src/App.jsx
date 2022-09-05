@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Headline from './components/Headline'
 import InsertDetails from './components/InsertDetails'
 import Features from './components/Features'
 import Submit from './components/Submit'
 import axios from "axios";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import Button from "@mui/material/Button";
+import {Dialog, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 
 function App() {
 
@@ -68,6 +66,8 @@ const onSubmit = async () => {
     "payload": payload
   });
   const data = response.data.replaceAll("=", ": ");
+  // var x = JSON.parse(data);
+  // console.log(x);
   setSolution(data);
   //setSolution(JSON.parse(data));
   setOpen(true);
@@ -91,7 +91,6 @@ const onSubmit = async () => {
           <DialogContentText>
             {solution}
           </DialogContentText>
-
         </DialogContent>
       </Dialog>
     </main>

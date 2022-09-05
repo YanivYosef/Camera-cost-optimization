@@ -35,8 +35,8 @@ import java.util.Random;
 
 public class JsonParser {
 
-    //public JsonParser(String payload){}
-
+    /*
+ create edges for checking different graphs
     private List<List<Integer>> createEdges(int vertexAmount){
         List<List<Integer>> lst = new ArrayList<>();
         Random rng = new MersenneTwisterRNG();
@@ -54,10 +54,10 @@ public class JsonParser {
         System.out.println();
         return lst;
     }
+*/
 
     public Payload parseGraph(String payload) throws Exception {
-        String jsonString = payload ; //assign your JSON String here
-        JSONObject obj = new JSONObject(jsonString);
+        JSONObject obj = new JSONObject(payload);
         int vertexAmount = 0;
         List<List<Integer>> edges = null;
         try{
@@ -95,36 +95,26 @@ public class JsonParser {
         int populationSize = 40;
         int maxNumOfGeneration = 100;
         double targetFitness = 0.7;
-        try{
-            numOfCamerasWeight = obj.getJSONObject("payload").getJSONObject("EaConfig").getDouble("numOfCamerasWeight");
-        } catch(Exception e){}
+
         try{
             minCameras = obj.getJSONObject("payload").getJSONObject("CamerasConfig").getInt("minNumOfCameras");
             maxCameras = obj.getJSONObject("payload").getJSONObject("CamerasConfig").getInt("maxNumOfCameras");
 
         } catch(Exception e){
-
             throw new Exception("Min cameras or Max cameras are not valid.");
-        }
-        try{
+        } try{
+            numOfCamerasWeight = obj.getJSONObject("payload").getJSONObject("EaConfig").getDouble("numOfCamerasWeight");
             selection = obj.getJSONObject("payload").getJSONObject("EaConfig").getInt("selection");
-
-        } catch(Exception e){}
-        try{
             populationSize = obj.getJSONObject("payload").getJSONObject("EaConfig").getInt("populationSize");
-
-        } catch(Exception e){}
-        try{
             maxNumOfGeneration = obj.getJSONObject("payload").getJSONObject("EaConfig").getInt("maxNumOfGeneration");
-
-        } catch(Exception e){}
-        try{
             targetFitness = obj.getJSONObject("payload").getJSONObject("EaConfig").getDouble("targetFitness");
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            throw new Exception("something went wrong while parsing the json. " + e.getMessage());
+        }
 
-        } catch(Exception e){}
-        Payload p = new Payload(graph,minCameras,maxCameras, numOfCamerasWeight, selection, populationSize,
+        return new Payload(graph,minCameras,maxCameras, numOfCamerasWeight, selection, populationSize,
                 maxNumOfGeneration, targetFitness);
-        return p;
     }
 }
 

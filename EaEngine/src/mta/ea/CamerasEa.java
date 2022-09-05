@@ -1,7 +1,6 @@
 package mta.ea;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.*;
@@ -9,9 +8,9 @@ import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.*;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
 
-import java.io.IOException;
+
 import java.util.*;
-import java.util.Arrays;
+
 /*
 http://localhost:8080/camerasMap
 {
@@ -40,21 +39,20 @@ http://localhost:8080/camerasMap
 
 
 public class CamerasEa {
-    private Graph graph;
-    private int minCameras;
-    private int maxCameras;
-    private double numOfCamerasWeight;
-    private double coverWeight;
-    private Selection selectionStrategy;
-    private final double prob = 0.6;
+    private final Graph graph;
+    private final int minCameras;
+    private final int maxCameras;
+    private final double coverWeight;
+    private final double numOfCamerasWeight;
+    private final Selection selectionStrategy;
     private double score = 0.0;
     private int generation = 0;
-    private int populationSize;
-    private int maxNumOfGeneration;
-    private double targetFitness;
+    private final int populationSize;
+    private final int maxNumOfGeneration;
+    private final double targetFitness;
 
     public CamerasEa(Graph graph, int minCameras, int maxCameras, double numOfCamerasWeight, double coverWeight,
-                     Selection selection, int populationSize, int maxNumOfGeneration, double targetFitness) throws IOException {
+                     Selection selection, int populationSize, int maxNumOfGeneration, double targetFitness){
 
         this.graph = graph;
         this.maxCameras=maxCameras;
@@ -75,7 +73,7 @@ public class CamerasEa {
      values of integers in the PossibleCover array will be between 1 and graph.vertexAmount
      */
 
-    public Map<String, Object> startEA() throws Exception {
+    public Map<String, Object> startEA() {
         List<Integer> vertices = new ArrayList<>();
         for(int i=1;i<=graph.vertexAmount;i++) {vertices.add(i);}
 
@@ -92,6 +90,7 @@ public class CamerasEa {
 
         FitnessEvaluator<List<Integer>> fitnessEvaluator = new CoverEvaluator(graph, numOfCamerasWeight);
         SelectionStrategy<Object> selection = null;
+        double prob = 0.6;
         switch(selectionStrategy) {
             case RouletteWheelSelection:
                 selection = new RouletteWheelSelection();
@@ -146,10 +145,7 @@ public class CamerasEa {
             }
         };
         List<Integer> result = engine.evolve(populationSize, 3, tc, new TargetFitness(targetFitness, true));
-//        Map<Integer, Integer> array = new HashMap<>();
-//        for (int i = 0; i < result.size(); i++) {
-//            array.put(i, result.get(i));
-//        }
+
         System.out.println(result);
         Map<String, Object> json = new HashMap();
         json.put("\"camerasLocation\"", result);
